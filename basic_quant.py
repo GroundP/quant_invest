@@ -1,4 +1,4 @@
-import os, sqlite3, io
+import os, sqlite3, io, json
 import time, datetime, random
 import pandas as pd
 from selenium import webdriver # 설치필요
@@ -149,14 +149,18 @@ def getCodeInfo():
         
     connect.close()
     print("종목별 추자정보 Insert : 완료")
-#     send_msg("주식 재무제표 획득 완료")
+    send_msg("주식 재무제표 획득 완료")
     
-# def send_msg(msg):
-#     with open('telepot.txt', 'r') as file:
-#         keys = file.readlines()
+def send_msg(msg):
+    with open('telepot.json', 'r') as file:
+        data = json.load(file)
+        api = data['api_key']
+        chatId = data['id']
+    bot = telepot.Bot(api)
+    bot.sendMessage(chatId, msg)
 
-sendText = "주식 정보를 수집합니다."
-print(sendText)
+
+print("주식 정보를 수집합니다.")
 
 resetDB()   # 데이터베이스 초기화
 getCodeList()   # 주식 목록 획득
